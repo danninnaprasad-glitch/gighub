@@ -44,7 +44,7 @@ const Navbar: React.FC<{ setView: (v: PageView) => void, active: PageView }> = (
 );
 
 const Footer: React.FC<{ setView: (v: PageView) => void, social: any, totalVisits: number, activeUsers: number, footerText: string }> = ({ setView, social, totalVisits, activeUsers, footerText }) => (
-  <footer className="relative z-20 bg-white border-t border-emerald-50 py-24 mt-auto w-full text-left">
+  <footer className="relative z-20 bg-white border-t border-emerald-50 py-24 mt-auto w-full text-left font-medium">
     <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-16">
       <div className="col-span-1 md:col-span-2">
         <h3 className="text-3xl font-black text-emerald-700 mb-6 tracking-tighter">GigHub</h3>
@@ -142,9 +142,9 @@ export default function App() {
   ];
 
   const LEGAL_CONTENT = {
-    [PageView.PRIVACY]: { title: "Privacy Protocol", text: "GigHub's Privacy Protocol (GPP) is built on the principle of Cognitive Sovereignty..." },
-    [PageView.TERMS]: { title: "Usage Terms", text: "By initializing a connection to the GigHub Neural Grid, you agree to adhere to the Fair-Play Synchronization Protocols..." },
-    [PageView.COOKIES]: { title: "Cookie Logic", text: "The GigHub ecosystem utilizes 'Logic Nodes' (commonly known as cookies) to maintain session continuity..." }
+    [PageView.PRIVACY]: { title: "Privacy Protocol", text: "GigHub's Privacy Protocol (GPP) is built on the principle of Cognitive Sovereignty. In 2026, your career data is more than just a resume; it is a behavioral and skill-based representation of your potential." },
+    [PageView.TERMS]: { title: "Usage Terms", text: "By initializing a connection to the GigHub Neural Grid, you agree to adhere to the Fair-Play Synchronization Protocols (FPSP)." },
+    [PageView.COOKIES]: { title: "Cookie Logic", text: "The GigHub ecosystem utilizes 'Logic Nodes' (commonly known as cookies) to maintain session continuity and platform performance." }
   };
 
   // --- PERSISTENCE EFFECTS ---
@@ -174,10 +174,10 @@ export default function App() {
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: msg,
-        config: { systemInstruction: 'You are the GigHub Neural Career Architect. Provide futuristic advice.' }
+        config: { systemInstruction: 'You are the GigHub Neural Career Architect. Provide futuristic, strategic career advice for 2026.' }
       });
       setAiMessages(p => [...p, {role: 'model', text: response.text || "Connection lost."}]);
-    } catch (err) { setAiMessages(p => [...p, {role: 'model', text: "Neural link error."}]); }
+    } catch (err) { setAiMessages(p => [...p, {role: 'model', text: "Neural link error. Check API Key configuration."}]); }
     finally { setAiThinking(false); }
   };
 
@@ -222,11 +222,11 @@ export default function App() {
     else setBlogs(prev => [post, ...prev]);
     setEditingPost(null);
     (e.target as HTMLFormElement).reset();
-    alert("Node synchronized.");
+    alert("Post transmission successful.");
   };
 
   const deletePost = (id: string) => {
-    if(window.confirm("Purge node?")) setBlogs(prev => prev.filter(b => b.id !== id));
+    if(window.confirm("Purge node permanently?")) setBlogs(prev => prev.filter(b => b.id !== id));
   };
 
   return (
@@ -240,19 +240,25 @@ export default function App() {
           <div className="max-w-7xl mx-auto px-6 py-20 fade-in">
             {selectedJob ? (
               <div className="max-w-5xl mx-auto">
-                <button onClick={() => setSelectedJob(null)} className="mb-10 flex items-center gap-3 font-black text-emerald-600">Back to Discovery Grid</button>
+                <button onClick={() => setSelectedJob(null)} className="mb-10 flex items-center gap-3 font-black text-emerald-600 hover:text-emerald-800 transition-all group">
+                   <div className="w-10 h-10 bg-emerald-50 rounded-full flex items-center justify-center group-hover:bg-emerald-100 transition-colors"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" /></svg></div>
+                   Back to Discovery Grid
+                </button>
                 <div className="bg-white rounded-[4rem] shadow-2xl border border-emerald-50 overflow-hidden">
                    <div className="bg-emerald-600 p-16 text-white relative">
                       <h1 className="text-5xl md:text-6xl font-black mb-4 tracking-tighter">{selectedJob.job_title}</h1>
-                      <p className="text-2xl font-black uppercase tracking-widest">{selectedJob.employer_name}</p>
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-emerald-600 font-black shadow-lg">@</div>
+                        <p className="text-2xl font-black uppercase tracking-widest">{selectedJob.employer_name}</p>
+                      </div>
                    </div>
                    <div className="p-16 grid lg:grid-cols-3 gap-20">
                       <div className="lg:col-span-2 space-y-16">
-                         <div className="prose prose-xl text-gray-600 leading-relaxed whitespace-pre-wrap font-medium">{selectedJob.job_description}</div>
+                         <div className="prose prose-xl prose-emerald max-w-none text-gray-600 leading-relaxed whitespace-pre-wrap font-medium">{selectedJob.job_description}</div>
                       </div>
                       <div className="space-y-10">
-                         <div className="bg-gray-50/50 p-10 rounded-[3.5rem] border border-gray-100">
-                            <a href={selectedJob.job_apply_link} target="_blank" className="block w-full bg-emerald-700 text-white text-center py-6 rounded-3xl font-black uppercase shadow-2xl">Apply Now</a>
+                         <div className="bg-gray-50/50 p-10 rounded-[3.5rem] border border-gray-100 shadow-sm sticky top-32">
+                            <a href={selectedJob.job_apply_link} target="_blank" className="block w-full bg-emerald-700 text-white text-center py-6 rounded-3xl font-black uppercase tracking-widest shadow-2xl hover:bg-emerald-800 transition-all hover:-translate-y-2 active:scale-95">Apply Now</a>
                          </div>
                       </div>
                    </div>
@@ -260,15 +266,16 @@ export default function App() {
               </div>
             ) : (
               <div>
-                <h1 className="text-8xl font-black mb-12 tracking-tighter">Discovery <span className="text-rose-400">Grid.</span></h1>
+                <h1 className="text-8xl font-black mb-12 tracking-tighter leading-none">Discovery <span className="text-rose-400">Grid.</span></h1>
                 <div className="flex flex-col md:flex-row gap-6 mb-16 p-8 bg-white rounded-[3rem] shadow-xl border border-emerald-50">
                    <div className="flex-1">
-                      <input type="text" placeholder="Filter by skills..." className="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold" value={userSkillsInput} onChange={e => setUserSkillsInput(e.target.value)} />
+                      <label className="text-[10px] font-black uppercase tracking-widest text-emerald-600 ml-4 mb-2 block">Skill-based AI Matching</label>
+                      <input type="text" placeholder="Filter by core skills..." className="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold text-gray-700 border border-transparent focus:border-emerald-200 transition-all" value={userSkillsInput} onChange={e => setUserSkillsInput(e.target.value)} />
                    </div>
-                   <button onClick={handleAiFiltering} className="bg-rose-500 text-white font-black px-10 py-4 rounded-2xl">Neural Filter</button>
+                   <button onClick={handleAiFiltering} className="bg-rose-500 text-white font-black px-10 py-4 rounded-2xl hover:bg-rose-600 transition-all shadow-lg shadow-rose-100 flex items-center justify-center gap-2 self-end">Neural Filter <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg></button>
                 </div>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-                   {loading && jobs.length === 0 ? <p className="col-span-full py-40 text-center font-black animate-pulse">Initializing Grid...</p> : jobs.map(j => <div key={j.job_id} onClick={() => setSelectedJob(j)} className="cursor-pointer"><JobCard job={j} /></div>)}
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 text-left">
+                   {loading && jobs.length === 0 ? <p className="col-span-full py-40 text-center font-black animate-pulse text-2xl uppercase tracking-[0.4em] text-emerald-800">Initializing Grid Nodes...</p> : jobs.map(j => <div key={j.job_id} onClick={() => setSelectedJob(j)} className="cursor-pointer"><JobCard job={j} /></div>)}
                 </div>
               </div>
             )}
@@ -277,11 +284,17 @@ export default function App() {
 
         {view === PageView.BLOG && (
           <div className="max-w-7xl mx-auto px-6 py-20 fade-in">
-             <h1 className="text-8xl font-black mb-16 tracking-tighter">Neural <span className="text-rose-400">Insights.</span></h1>
+             <h1 className="text-8xl font-black mb-16 tracking-tighter leading-none">Neural <span className="text-rose-400">Insights.</span></h1>
              <div className="grid md:grid-cols-3 gap-12">
                 {blogs.map(p => (
                   <div key={p.id} onClick={() => { setSelectedPost(p); setView(PageView.BLOG_POST); }} className="bg-white rounded-[4rem] overflow-hidden border border-emerald-50 shadow-sm cursor-pointer hover:shadow-2xl transition-all group">
-                    <div className="relative h-72 overflow-hidden"><img src={p.image} className="w-full h-full object-cover" /><div className="absolute bottom-8 left-8 text-white"><h3 className="text-2xl font-black leading-tight">{p.title}</h3></div></div>
+                    <div className="relative h-72 overflow-hidden">
+                       <img src={p.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                       <div className="absolute bottom-8 left-8 text-white">
+                          <h3 className="text-2xl font-black leading-tight">{p.title}</h3>
+                       </div>
+                    </div>
                   </div>
                 ))}
              </div>
@@ -290,16 +303,26 @@ export default function App() {
 
         {view === PageView.BLOG_POST && selectedPost && (
           <div className="max-w-4xl mx-auto px-6 py-20 fade-in">
-            <button onClick={() => setView(PageView.BLOG)} className="mb-16 font-black text-emerald-600">Back</button>
-            <h1 className="text-7xl font-black mb-12 text-emerald-900">{selectedPost.title}</h1>
-            <div className="prose prose-2xl text-gray-600 leading-relaxed whitespace-pre-wrap font-medium">{selectedPost.content}</div>
+            <button onClick={() => setView(PageView.BLOG)} className="mb-16 flex items-center gap-3 font-black text-emerald-600 hover:text-emerald-800 transition-all group">
+               <div className="w-10 h-10 bg-emerald-50 rounded-full flex items-center justify-center group-hover:bg-emerald-100 transition-colors"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" /></svg></div>
+               Neural Insights Feed
+            </button>
+            <h1 className="text-7xl font-black mb-12 leading-none tracking-tight text-emerald-900">{selectedPost.title}</h1>
+            <div className="flex items-center gap-6 mb-20 border-y border-emerald-50 py-10">
+               <div className="w-16 h-16 bg-emerald-600 rounded-2xl flex items-center justify-center font-black text-2xl text-white shadow-xl">{selectedPost.author.charAt(0)}</div>
+               <div>
+                  <p className="font-black text-emerald-800 uppercase text-sm tracking-widest">{selectedPost.author}</p>
+                  <p className="text-xs font-bold text-gray-400 uppercase mt-1">Transmission Date: {selectedPost.date}</p>
+               </div>
+            </div>
+            <div className="prose prose-2xl prose-emerald max-w-none text-gray-600 leading-relaxed whitespace-pre-wrap font-medium">{selectedPost.content}</div>
           </div>
         )}
 
         {view === PageView.ABOUT && (
           <div className="max-w-7xl mx-auto px-6 py-32 fade-in">
              <h1 className="text-8xl font-black mb-12 tracking-tighter leading-none">Career <br/> <span className="text-emerald-600">Infrastructure.</span></h1>
-             <p className="text-3xl text-gray-500 leading-relaxed font-medium">GigHub is the intelligence layer for the AGI era.</p>
+             <p className="text-3xl text-gray-500 leading-relaxed font-medium mb-16">GigHub is not a job board. It is a neural discovery grid designed to synchronize human creative potential with global compute.</p>
           </div>
         )}
 
@@ -310,64 +333,94 @@ export default function App() {
                    <h1 className="text-8xl font-black mb-12 tracking-tighter leading-none">Initiate <br/><span className="text-rose-400">Signal.</span></h1>
                    <div className="space-y-16">
                       <div className="flex gap-10 items-center">
-                         <div><p className="text-[10px] font-black text-gray-300 uppercase">Neural Node</p><p className="text-2xl font-black text-emerald-900">{contactInfo.email}</p></div>
+                         <div className="w-20 h-20 bg-emerald-50 rounded-[2rem] flex items-center justify-center text-emerald-600 shadow-sm"><svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg></div>
+                         <div><p className="text-[10px] font-black text-gray-300 uppercase tracking-widest">Neural Node</p><p className="text-2xl font-black text-emerald-900">{contactInfo.email}</p></div>
                       </div>
                       <div className="flex gap-10 items-center">
-                         <div><p className="text-[10px] font-black text-gray-300 uppercase">Physical Hub</p><p className="text-2xl font-black text-rose-900">{contactInfo.address}</p></div>
+                         <div className="w-20 h-20 bg-rose-50 rounded-[2rem] flex items-center justify-center text-rose-600 shadow-sm"><svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg></div>
+                         <div><p className="text-[10px] font-black text-gray-300 uppercase tracking-widest">Physical Hub</p><p className="text-2xl font-black text-rose-900">{contactInfo.address}</p></div>
                       </div>
                       <div className="flex gap-10 items-center">
-                         <div><p className="text-[10px] font-black text-gray-300 uppercase">Comms Line</p><p className="text-2xl font-black text-emerald-900">{contactInfo.phone}</p></div>
+                         <div className="w-20 h-20 bg-emerald-50 rounded-[2rem] flex items-center justify-center text-emerald-600 shadow-sm"><svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg></div>
+                         <div><p className="text-[10px] font-black text-gray-300 uppercase tracking-widest">Comms Line</p><p className="text-2xl font-black text-emerald-900">{contactInfo.phone}</p></div>
                       </div>
                    </div>
                 </div>
                 <form action={FORMSPREE_URL} method="POST" className="relative bg-white p-16 rounded-[4rem] shadow-2xl space-y-10 border border-emerald-50">
-                   <input name="name" type="text" placeholder="Identity" className="w-full p-6 bg-emerald-50/50 rounded-2xl font-bold" required />
-                   <input name="email" type="email" placeholder="Email" className="w-full p-6 bg-emerald-50/50 rounded-2xl font-bold" required />
-                   <textarea name="message" rows={5} placeholder="Transmission..." className="w-full p-6 bg-emerald-50/50 rounded-2xl font-bold resize-none" required></textarea>
-                   <button type="submit" className="w-full bg-emerald-700 text-white font-black py-10 rounded-[2.5rem] text-2xl shadow-2xl">Broadcast Signal</button>
+                   <div className="grid sm:grid-cols-2 gap-10">
+                      <input name="name" type="text" placeholder="Identity" className="w-full p-6 bg-emerald-50/50 rounded-2xl font-bold outline-none" required />
+                      <input name="email" type="email" placeholder="john@sync.io" className="w-full p-6 bg-emerald-50/50 rounded-2xl font-bold outline-none" required />
+                   </div>
+                   <textarea name="message" rows={5} placeholder="Initiate transmission..." className="w-full p-6 bg-emerald-50/50 rounded-2xl font-bold outline-none resize-none shadow-inner" required></textarea>
+                   <button type="submit" className="w-full bg-emerald-700 text-white font-black py-10 rounded-[2.5rem] text-2xl shadow-2xl hover:bg-emerald-800 transition-all hover:-translate-y-2 active:scale-95">Broadcast Signal</button>
                 </form>
              </div>
           </div>
         )}
 
         {view === PageView.ADMIN && (
-          <div className="max-w-7xl mx-auto px-6 py-20 fade-in">
+          <div className="max-w-7xl mx-auto px-6 py-20 fade-in text-left">
             {!isAdmin ? (
-              <form onSubmit={e => { e.preventDefault(); if(passcode === ADMIN_PASSCODE) setIsAdmin(true); else alert('Denied'); }} className="max-w-md mx-auto bg-white p-16 rounded-[4rem] shadow-2xl text-center">
-                <h2 className="text-3xl font-black mb-8">Admin Sync</h2>
-                <input type="password" className="w-full p-6 bg-gray-50 rounded-2xl mb-10 outline-none text-center font-black" value={passcode} onChange={e => setPasscode(e.target.value)} />
-                <button type="submit" className="w-full bg-emerald-700 text-white py-6 rounded-2xl">Initialize Portal</button>
+              <form onSubmit={e => { e.preventDefault(); if(passcode === ADMIN_PASSCODE) setIsAdmin(true); else alert('Neural denial'); }} className="max-w-md mx-auto bg-white p-16 rounded-[4rem] shadow-2xl text-center border border-emerald-50">
+                <h2 className="text-3xl font-black mb-8 text-emerald-900 tracking-tighter uppercase">Admin Synchronization</h2>
+                <input type="password" placeholder="Passcode" className="w-full p-6 text-center bg-gray-50 rounded-2xl mb-10 outline-none font-black text-xl tracking-[0.5em] border-2 border-transparent focus:border-emerald-600 transition-all" value={passcode} onChange={e => setPasscode(e.target.value)} />
+                <button type="submit" className="w-full bg-emerald-700 text-white font-black py-6 rounded-2xl text-xl shadow-xl hover:bg-emerald-800 transition-all">Initialize Portal</button>
               </form>
             ) : (
-              <div className="grid lg:grid-cols-2 gap-16">
-                 <div className="bg-white p-12 rounded-[4rem] shadow-xl border border-emerald-50">
-                    <h3 className="text-2xl font-black mb-10">Manage Insights</h3>
-                    <form onSubmit={savePost} className="space-y-6">
-                       <input name="title" placeholder="Title" defaultValue={editingPost?.title} className="w-full p-5 bg-gray-50 rounded-2xl font-bold" required />
-                       <input name="author" placeholder="Author" defaultValue={editingPost?.author} className="w-full p-5 bg-gray-50 rounded-2xl font-bold" required />
-                       <textarea name="content" rows={8} defaultValue={editingPost?.content} className="w-full p-6 bg-gray-50 rounded-2xl font-bold" required></textarea>
-                       <button type="submit" className="w-full bg-emerald-700 text-white py-6 rounded-2xl font-black">Sync Node</button>
-                    </form>
-                    <div className="mt-10 space-y-4">
-                       {blogs.map(b => (
-                         <div key={b.id} className="flex justify-between items-center p-6 bg-gray-50 rounded-3xl">
-                            <p className="font-black truncate flex-1">{b.title}</p>
-                            <div className="flex gap-4"><button onClick={() => setEditingPost(b)} className="text-emerald-600 font-bold">Edit</button><button onClick={() => deletePost(b.id)} className="text-rose-500 font-bold">Delete</button></div>
-                         </div>
-                       ))}
-                    </div>
+              <div className="space-y-16">
+                 <div className="flex justify-between items-center bg-emerald-600 p-8 rounded-[2.5rem] text-white shadow-xl">
+                    <h2 className="text-3xl font-black tracking-tight uppercase">Management Hub</h2>
+                    <button onClick={() => setIsAdmin(false)} className="px-8 py-3 bg-white/10 hover:bg-white/20 rounded-xl font-black uppercase text-xs tracking-widest transition-colors">Disconnect</button>
                  </div>
-                 <div className="bg-white p-12 rounded-[4rem] shadow-xl border border-emerald-50">
-                    <h3 className="text-2xl font-black mb-10">Context Architecture</h3>
-                    <div className="space-y-10">
-                       <div className="space-y-4">
-                          <label className="text-[10px] font-black uppercase tracking-widest text-emerald-600 block">Contact Synchronization</label>
-                          <input value={contactInfo.email} onChange={e => setContactInfo({...contactInfo, email: e.target.value})} className="w-full p-4 bg-gray-50 rounded-xl outline-none font-bold text-xs" placeholder="Email" />
-                          <input value={contactInfo.address} onChange={e => setContactInfo({...contactInfo, address: e.target.value})} className="w-full p-4 bg-gray-50 rounded-xl outline-none font-bold text-xs" placeholder="Address" />
-                          <input value={contactInfo.phone} onChange={e => setContactInfo({...contactInfo, phone: e.target.value})} className="w-full p-4 bg-gray-50 rounded-xl outline-none font-bold text-xs" placeholder="Phone" />
+
+                 <div className="grid lg:grid-cols-2 gap-16 items-start">
+                    {/* BLOG CRUD SECTION */}
+                    <div className="bg-white p-12 rounded-[4rem] shadow-xl border border-emerald-50">
+                       <h3 className="text-2xl font-black mb-10 text-emerald-900 flex items-center gap-3"><div className="w-1.5 h-8 bg-emerald-500 rounded-full"></div> {editingPost ? 'Update Insight Node' : 'Create New Insight'}</h3>
+                       <form onSubmit={savePost} className="space-y-6">
+                          <input name="title" placeholder="Post Title" defaultValue={editingPost?.title} className="w-full p-5 bg-gray-50 rounded-2xl outline-none font-bold" required />
+                          <input name="author" placeholder="Author Identity" defaultValue={editingPost?.author} className="w-full p-5 bg-gray-50 rounded-2xl outline-none font-bold" required />
+                          <textarea name="content" rows={8} placeholder="Content Payload" defaultValue={editingPost?.content} className="w-full p-6 bg-gray-50 rounded-2xl outline-none font-bold resize-none" required></textarea>
+                          <button type="submit" className="w-full bg-emerald-700 text-white py-6 rounded-2xl font-black uppercase tracking-widest hover:bg-emerald-800 transition-all shadow-lg">{editingPost ? 'Commit Node Update' : 'Initialize Transmission'}</button>
+                          {editingPost && <button type="button" onClick={() => setEditingPost(null)} className="w-full bg-gray-100 text-gray-500 py-4 rounded-xl font-black uppercase text-xs mt-2">Cancel Edit</button>}
+                       </form>
+                       <div className="mt-10 space-y-4">
+                          {blogs.map(b => (
+                            <div key={b.id} className="flex justify-between items-center p-6 bg-gray-50 rounded-3xl group border border-transparent hover:border-emerald-100 transition-all">
+                               <p className="font-black text-emerald-900 truncate flex-1">{b.title}</p>
+                               <div className="flex gap-4"><button onClick={() => setEditingPost(b)} className="text-emerald-600 font-bold uppercase text-xs tracking-widest">Edit</button><button onClick={() => deletePost(b.id)} className="text-rose-500 font-bold uppercase text-xs tracking-widest">Purge</button></div>
+                            </div>
+                          ))}
                        </div>
-                       <textarea value={footerText} onChange={e => setFooterText(e.target.value)} className="w-full p-6 bg-gray-50 rounded-2xl font-bold outline-none" rows={4}></textarea>
-                       <button onClick={() => alert("Synchronized.")} className="w-full bg-emerald-100 text-emerald-700 py-6 rounded-2xl font-black uppercase">Sync Global Cache</button>
+                    </div>
+
+                    {/* CONFIG & CONTACT SECTION */}
+                    <div className="bg-white p-12 rounded-[4rem] shadow-xl border border-emerald-50">
+                       <h3 className="text-2xl font-black mb-10 text-emerald-900 flex items-center gap-3"><div className="w-1.5 h-8 bg-rose-400 rounded-full"></div> Context Architecture</h3>
+                       <div className="space-y-10">
+                          <div className="space-y-6">
+                             <label className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-600 block ml-2">Contact Synchronization</label>
+                             <div className="space-y-2">
+                                <p className="text-[8px] font-black uppercase text-gray-400 ml-4">Neural Node Email</p>
+                                <input value={contactInfo.email} onChange={e => setContactInfo({...contactInfo, email: e.target.value})} className="w-full p-5 bg-gray-50 rounded-2xl outline-none font-bold text-gray-800 border-2 border-transparent focus:border-emerald-100 transition-all" placeholder="email@gighub.ai" />
+                             </div>
+                             <div className="space-y-2">
+                                <p className="text-[8px] font-black uppercase text-gray-400 ml-4">Physical Hub Address</p>
+                                <input value={contactInfo.address} onChange={e => setContactInfo({...contactInfo, address: e.target.value})} className="w-full p-5 bg-gray-50 rounded-2xl outline-none font-bold text-gray-800 border-2 border-transparent focus:border-emerald-100 transition-all" placeholder="Neo-Tech District..." />
+                             </div>
+                             <div className="space-y-2">
+                                <p className="text-[8px] font-black uppercase text-gray-400 ml-4">Comms Line (Phone)</p>
+                                <input value={contactInfo.phone} onChange={e => setContactInfo({...contactInfo, phone: e.target.value})} className="w-full p-5 bg-gray-50 rounded-2xl outline-none font-bold text-gray-800 border-2 border-transparent focus:border-emerald-100 transition-all" placeholder="+1 (555)..." />
+                             </div>
+                          </div>
+                          
+                          <div className="space-y-4">
+                             <label className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-600 block ml-2">Global Footer Logic</label>
+                             <textarea value={footerText} onChange={e => setFooterText(e.target.value)} className="w-full p-6 bg-gray-50 rounded-2xl font-bold outline-none border-2 border-transparent focus:border-emerald-100 transition-all resize-none" rows={4}></textarea>
+                          </div>
+                          
+                          <button onClick={() => alert("Platform context synchronized to localStorage.")} className="w-full bg-emerald-100 text-emerald-700 py-6 rounded-2xl font-black uppercase tracking-widest hover:bg-emerald-200 transition-all">Sync Global Cache</button>
+                       </div>
                     </div>
                  </div>
               </div>
@@ -377,20 +430,22 @@ export default function App() {
 
         {(LEGAL_CONTENT as any)[view] && (
           <div className="max-w-4xl mx-auto px-6 py-32 fade-in">
-            <h1 className="text-7xl font-black mb-16 text-emerald-900">{(LEGAL_CONTENT as any)[view].title}</h1>
+            <h1 className="text-7xl font-black mb-16 tracking-tighter text-emerald-900">{(LEGAL_CONTENT as any)[view].title}</h1>
             <div className="bg-white p-20 rounded-[4rem] shadow-2xl text-gray-600 text-xl leading-relaxed whitespace-pre-wrap font-medium border border-emerald-50">{(LEGAL_CONTENT as any)[view].text}</div>
           </div>
         )}
 
         {view === PageView.FAQ && (
           <div className="max-w-4xl mx-auto px-6 py-32 fade-in">
-            <h1 className="text-8xl font-black mb-24 tracking-tighter">Node <span className="text-rose-400">Support.</span></h1>
-            {FAQ_DATA.map((faq, i) => (
-              <div key={i} className="bg-white p-12 rounded-[3.5rem] border border-emerald-50 mb-8" onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}>
-                <p className="text-2xl font-black cursor-pointer">{faq.q}</p>
-                {openFaqIndex === i && <p className="mt-8 text-gray-500 font-medium leading-relaxed border-t pt-8">{faq.a}</p>}
-              </div>
-            ))}
+            <h1 className="text-8xl font-black mb-24 tracking-tighter leading-none">Node <span className="text-rose-400">Support.</span></h1>
+            <div className="space-y-8">
+              {FAQ_DATA.map((faq, i) => (
+                <div key={i} className="bg-white p-12 rounded-[3.5rem] border border-emerald-50 shadow-sm cursor-pointer hover:shadow-xl transition-all" onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}>
+                  <div className="flex justify-between items-center"><p className="text-2xl font-black">{faq.q}</p><span className="text-3xl font-black text-emerald-200">{openFaqIndex === i ? '−' : '+'}</span></div>
+                  {openFaqIndex === i && <p className="mt-8 text-gray-500 font-medium leading-relaxed border-t border-emerald-50 pt-8 text-lg">{faq.a}</p>}
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </main>
