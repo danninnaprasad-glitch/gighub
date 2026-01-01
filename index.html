@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GigHub | AI-Powered Job Portal & Career Insights</title>
+    <meta name="description" content="GigHub uses Gemini AI to match you with top remote developer jobs. Explore 50+ listings, career blogs, and AI-driven job suggestions.">
+    <meta name="keywords" content="jobs, remote work, developer jobs, AI job portal, career advice, Gemini AI, GigHub">
+    
+    <!-- Site Verification -->
+    <meta name="google-site-verification" content="jH1u0I42Z_WPqmSpAadrOBzuxGGGhsh7URDFx979WiU" />
+    <meta name="8c6cab1b8caa88defcbe2dc6ec34acbaca1a696d" content="8c6cab1b8caa88defcbe2dc6ec34acbaca1a696d" />
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="GigHub - Find Your Dream Job with AI">
+    <meta property="og:description" content="The ultimate AI-powered job portal for modern professionals.">
+    <meta property="og:image" content="https://picsum.photos/1200/630?business">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "GigHub",
+      "url": "https://gighub.ai",
+      "logo": "https://gighub.ai/logo.png",
+      "description": "AI-Powered Job Platform matching talent with remote opportunities."
+    }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        html, body, #root { height: 100%; }
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .animate-gradient {
+            background-size: 200% 200%;
+            animation: gradient-animation 10s ease infinite;
+        }
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .adsense-placeholder {
+            min-height: 90px;
+            background: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #e2e8f0;
+            color: #94a3b8;
+            font-size: 0.75rem;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
+    "three": "https://esm.sh/three@^0.182.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-[#fffdfd] text-gray-900 overflow-x-hidden">
+    <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
