@@ -3,10 +3,7 @@
   "name": "GigHub - AI Powered Job Platform",
   "short_name": "GigHub",
   "description": "High-performance AI job portal featuring Gemini-driven matching, career blogs, and global remote developer listings.",
-  "requestFramePermissions": [
-    "camera",
-    "microphone"
-  ],
+  "requestFramePermissions": [],
   "theme_color": "#2563eb",
   "background_color": "#f8fafc"
 }
